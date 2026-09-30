@@ -1,4 +1,5 @@
 using Curriculos.Api.Data;
+using Curriculos.Api.Data.Seed;
 using Curriculos.Api.Middleware;
 using Curriculos.Api.Services;
 using Curriculos.Api.Services.Pdf;
@@ -53,6 +54,13 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
+}
+
+if (app.Configuration.GetValue<bool>("Database:SeedData"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await CandidatosSeed.ExecutarAsync(db);
 }
 
 app.UseSerilogRequestLogging();
