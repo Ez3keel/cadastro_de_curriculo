@@ -1,0 +1,38 @@
+## .NET / Visual Studio / Rider
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.userosscache
+*.sln.docstates
+
+## Logs (nunca versionar, podem conter dados sensíveis)
+logs/
+*.log
+
+## Node / Vite / React
+node_modules/
+dist/
+dist-ssr/
+*.local
+.vite/
+
+## Testes e cobertura
+coverage/
+TestResults/
+
+## Variáveis de ambiente e segredos
+.env
+.env.local
+appsettings.Development.json
+appsettings.Production.json
+
+## Banco de dados local (ex.: LocalDB)
+*.mdf
+*.ldf
+
+## Sistema operacional
+.DS_Store
+Thumbs.db
