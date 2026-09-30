@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Curriculos.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260930143858_InitialCreate")]
+    [Migration("20260930212327_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,11 +27,8 @@ namespace Curriculos.Api.Migrations
 
             modelBuilder.Entity("Curriculos.Api.Models.Candidato", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AreaInteresse")
                         .HasMaxLength(100)

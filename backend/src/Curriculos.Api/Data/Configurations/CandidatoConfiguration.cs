@@ -12,6 +12,9 @@ public class CandidatoConfiguration : IEntityTypeConfiguration<Candidato>
 
         builder.HasKey(c => c.Id);
 
+        builder.Property(c => c.Id)
+            .ValueGeneratedNever();
+
         builder.Property(c => c.NomeCompleto)
             .IsRequired()
             .HasMaxLength(150);

@@ -45,8 +45,8 @@ public class CandidatosController : ControllerBase
         return Ok(candidatos);
     }
 
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<CandidatoResponse>> ObterPorId(int id)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<CandidatoResponse>> ObterPorId(Guid id)
     {
         var candidato = await _candidatoService.ObterPorIdAsync(id);
         return candidato is null ? NotFound() : Ok(candidato);

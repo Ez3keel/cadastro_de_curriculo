@@ -5,7 +5,7 @@ export function listarCandidatos() {
   return apiClient.get<CandidatoListItem[]>('/api/candidatos');
 }
 
-export function obterCandidato(id: number) {
+export function obterCandidato(id: string) {
   return apiClient.get<Candidato>(`/api/candidatos/${id}`);
 }
 

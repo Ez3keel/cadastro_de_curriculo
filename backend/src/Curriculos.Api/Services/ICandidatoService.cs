@@ -6,5 +6,5 @@ public interface ICandidatoService
 {
     Task<CandidatoResponse> CriarAsync(CandidatoRequest request);
     Task<IReadOnlyList<CandidatoListItemResponse>> ListarAsync();
-    Task<CandidatoResponse?> ObterPorIdAsync(int id);
+    Task<CandidatoResponse?> ObterPorIdAsync(Guid id);
 }

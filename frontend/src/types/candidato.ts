@@ -1,5 +1,5 @@
 export interface CandidatoListItem {
-  id: number;
+  id: string;
   nomeCompleto: string;
   email: string;
   areaInteresse: string | null;
@@ -7,7 +7,7 @@ export interface CandidatoListItem {
 }
 
 export interface Candidato {
-  id: number;
+  id: string;
   nomeCompleto: string;
   email: string;
   telefone: string | null;

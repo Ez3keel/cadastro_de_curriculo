@@ -1,7 +1,7 @@
 namespace Curriculos.Api.Dtos;
 
 public record CandidatoListItemResponse(
-    int Id,
+    Guid Id,
     string NomeCompleto,
     string Email,
     string? AreaInteresse,

@@ -44,7 +44,7 @@ export function DetalhesPage() {
   useEffect(() => {
     if (!id) return;
 
-    obterCandidato(Number(id))
+    obterCandidato(id)
       .then(setCandidato)
       .catch((error) => {
         if (error instanceof ApiError && error.status === 404) {

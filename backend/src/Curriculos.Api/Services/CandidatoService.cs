@@ -29,6 +29,7 @@ public class CandidatoService : ICandidatoService
 
         var candidato = new Candidato
         {
+            Id = Guid.NewGuid(),
             NomeCompleto = request.NomeCompleto.Trim(),
             Email = emailNormalizado,
             Telefone = request.Telefone?.Trim(),
@@ -51,7 +52,7 @@ public class CandidatoService : ICandidatoService
             .ToListAsync();
     }
 
-    public async Task<CandidatoResponse?> ObterPorIdAsync(int id)
+    public async Task<CandidatoResponse?> ObterPorIdAsync(Guid id)
     {
         var candidato = await _context.Candidatos.FindAsync(id);
         return candidato is null ? null : ParaResponse(candidato);

@@ -24,11 +24,8 @@ namespace Curriculos.Api.Migrations
 
             modelBuilder.Entity("Curriculos.Api.Models.Candidato", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AreaInteresse")
                         .HasMaxLength(100)

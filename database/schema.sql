@@ -11,11 +11,11 @@ GO
 BEGIN TRANSACTION;
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260930143858_InitialCreate'
+    WHERE [MigrationId] = N'20260930212327_InitialCreate'
 )
 BEGIN
     CREATE TABLE [Candidatos] (
-        [Id] int NOT NULL IDENTITY,
+        [Id] uniqueidentifier NOT NULL,
         [NomeCompleto] nvarchar(150) NOT NULL,
         [Email] nvarchar(254) NOT NULL,
         [Telefone] nvarchar(20) NULL,
@@ -28,7 +28,7 @@ END;
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260930143858_InitialCreate'
+    WHERE [MigrationId] = N'20260930212327_InitialCreate'
 )
 BEGIN
     CREATE UNIQUE INDEX [IX_Candidatos_Email] ON [Candidatos] ([Email]);
@@ -36,11 +36,11 @@ END;
 
 IF NOT EXISTS (
     SELECT * FROM [__EFMigrationsHistory]
-    WHERE [MigrationId] = N'20260930143858_InitialCreate'
+    WHERE [MigrationId] = N'20260930212327_InitialCreate'
 )
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20260930143858_InitialCreate', N'10.0.12');
+    VALUES (N'20260930212327_InitialCreate', N'10.0.12');
 END;
 
 COMMIT;

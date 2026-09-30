@@ -18,6 +18,7 @@ A ausência de PDF ou uma falha na leitura nunca impede o cadastro manual.
 | Validação | FluentValidation | 12.1.1 |
 | Leitura de PDF | UglyToad.PdfPig | 1.7.0-custom-5 |
 | Logging | Serilog.AspNetCore | 10.0.0 |
+| Documentação da API | Swashbuckle.AspNetCore (Swagger UI) | 10.2.3 |
 | Testes backend | xUnit | (via template .NET 10) |
 | Frontend | React + TypeScript + Vite | React 19.3.0, TS 6.0.3, Vite 8.3.1 |
 | Roteamento | React Router | 7.18.4 |
@@ -87,7 +88,7 @@ dotnet run --project src/Curriculos.Api
 ```
 
 A API sobe por padrão em `http://localhost:5299` (ver `src/Curriculos.Api/Properties/launchSettings.json`).
-O Swagger fica disponível em `/openapi/v1.json` apenas em Development.
+O Swagger UI fica disponível em `/swagger` apenas em Development.
 
 Para popular o banco com 3 candidatos fictícios, defina `Database:SeedData=true` (por exemplo, via
 variável de ambiente `Database__SeedData=true`) antes de rodar — a inserção só ocorre se a tabela

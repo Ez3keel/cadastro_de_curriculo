@@ -71,7 +71,7 @@ public class CandidatoServiceTests
         await using var context = CriarContexto();
         var service = new CandidatoService(context);
 
-        var resultado = await service.ObterPorIdAsync(999);
+        var resultado = await service.ObterPorIdAsync(Guid.NewGuid());
 
         Assert.Null(resultado);
     }

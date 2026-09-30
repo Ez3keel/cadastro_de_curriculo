@@ -15,6 +15,7 @@ public static class CandidatosSeed
         context.Candidatos.AddRange(
             new Candidato
             {
+                Id = Guid.NewGuid(),
                 NomeCompleto = "Ana Beatriz Ferreira",
                 Email = "ana.ferreira@exemplo.com",
                 Telefone = "(41) 98888-1111",
@@ -24,6 +25,7 @@ public static class CandidatosSeed
             },
             new Candidato
             {
+                Id = Guid.NewGuid(),
                 NomeCompleto = "Bruno Costa Lima",
                 Email = "bruno.lima@exemplo.com",
                 Telefone = "(41) 97777-2222",
@@ -33,6 +35,7 @@ public static class CandidatosSeed
             },
             new Candidato
             {
+                Id = Guid.NewGuid(),
                 NomeCompleto = "Carla Souza Martins",
                 Email = "carla.martins@exemplo.com",
                 Telefone = "(41) 96666-3333",
