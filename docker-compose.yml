@@ -1,0 +1,47 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=Curriculos;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True;"
+      Database__ApplyMigrationsOnStartup: "true"
+      Database__SeedData: "true"
+      Cors__AllowedOrigin: "http://localhost:${WEB_PORT:-8081}"
+      ASPNETCORE_ENVIRONMENT: Production
+    ports:
+      - "${API_PORT:-5299}:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: "http://localhost:${API_PORT:-5299}"
+    ports:
+      - "${WEB_PORT:-8081}:80"
+    depends_on:
+      - api
+
+volumes:
+  sqlserver-data:
