@@ -166,8 +166,10 @@ com mensagens em português.
   `422` orientando o preenchimento manual.
 - A identificação de nome é heurística (primeira linha com 2 a 6 palavras, só letras e espaços,
   ignorando títulos como "Currículo" ou "Resumo") e pode falhar em layouts fora desse padrão
-  (ex.: nome ao lado de uma foto, currículos em colunas, nome em caixa alta misturado a outros
-  elementos no cabeçalho).
+  (ex.: nome ao lado de uma foto, nome em caixa alta misturado a outros elementos no cabeçalho).
+  Layouts de duas colunas (ex.: barra lateral de contato ao lado do conteúdo principal) são
+  tratados detectando um espaço horizontal grande entre palavras vizinhas na mesma altura, mas
+  colunas muito próximas ou mais de duas colunas ainda podem confundir a heurística.
 - E-mail e telefone usam expressões regulares comuns a formatos brasileiros; formatos incomuns
   podem não ser reconhecidos.
 - Quando um campo não é encontrado, ele fica em branco no formulário para preenchimento manual —

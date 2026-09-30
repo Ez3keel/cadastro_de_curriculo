@@ -11,6 +11,11 @@ public class PdfPigTextExtractor : ICurriculoTextExtractor
     // tolerância em vez de comparar o valor exato.
     private const double ToleranciaMesmaLinha = 5.0;
 
+    // Em layouts de duas colunas (ex.: barra lateral e conteúdo principal), palavras de
+    // colunas diferentes podem cair na mesma altura. Um espaço horizontal bem maior que o
+    // espaço normal entre palavras indica uma quebra de coluna, não uma continuação da linha.
+    private const double ToleranciaEspacoEntrePalavras = 40.0;
+
     public string ExtrairTexto(byte[] conteudoPdf)
     {
         using var stream = new MemoryStream(conteudoPdf);
@@ -44,7 +49,11 @@ public class PdfPigTextExtractor : ICurriculoTextExtractor
             }
             else
             {
-                yield return MontarLinha(linhaAtual);
+                foreach (var subLinha in SepararPorColuna(linhaAtual))
+                {
+                    yield return subLinha;
+                }
+
                 linhaAtual = [palavra];
                 topDaLinhaAtual = palavra.BoundingBox.Top;
             }
@@ -52,10 +61,31 @@ public class PdfPigTextExtractor : ICurriculoTextExtractor
 
         if (linhaAtual.Count > 0)
         {
-            yield return MontarLinha(linhaAtual);
+            foreach (var subLinha in SepararPorColuna(linhaAtual))
+            {
+                yield return subLinha;
+            }
         }
     }
 
-    private static string MontarLinha(List<Word> palavrasDaLinha) =>
-        string.Join(' ', palavrasDaLinha.OrderBy(p => p.BoundingBox.Left).Select(p => p.Text));
+    private static IEnumerable<string> SepararPorColuna(List<Word> palavrasDaLinha)
+    {
+        var ordenadas = palavrasDaLinha.OrderBy(p => p.BoundingBox.Left).ToList();
+
+        var grupoAtual = new List<Word> { ordenadas[0] };
+
+        for (var i = 1; i < ordenadas.Count; i++)
+        {
+            var espaco = ordenadas[i].BoundingBox.Left - ordenadas[i - 1].BoundingBox.Right;
+            if (espaco > ToleranciaEspacoEntrePalavras)
+            {
+                yield return string.Join(' ', grupoAtual.Select(p => p.Text));
+                grupoAtual = [];
+            }
+
+            grupoAtual.Add(ordenadas[i]);
+        }
+
+        yield return string.Join(' ', grupoAtual.Select(p => p.Text));
+    }
 }

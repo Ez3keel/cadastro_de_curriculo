@@ -84,15 +84,28 @@ as palavras comparando suas posições exatas, porém pequenas diferenças na po
 com que palavras pertencentes à mesma linha fossem tratadas como linhas diferentes. A solução final
 passou a utilizar uma tolerância de posição para realizar o agrupamento de forma mais confiável.
 
+Posteriormente, a extração foi testada com 5 currículos fictícios adicionais, de layouts variados.
+Quatro foram identificados corretamente, mas um — de layout em duas colunas, com uma barra lateral de
+contato ao lado do conteúdo principal — teve o nome extraído incorretamente ("CONTATO Mariana Costa"
+em vez de "Mariana Costa"), porque o cabeçalho da barra lateral estava na mesma altura vertical do
+nome, na outra coluna, e o agrupamento de linha (por posição vertical) misturava as duas colunas. A
+correção passou a detectar um espaço horizontal bem maior que o espaço normal entre palavras como
+indício de quebra de coluna, separando esse trecho em duas linhas distintas. Um teste automatizado
+usando esse PDF como fixture foi adicionado para não regredir esse cenário.
+
 ## Como a solução foi verificada
 
 A qualidade da implementação foi verificada por diferentes mecanismos. No backend foram
-desenvolvidos 27 testes utilizando xUnit, enquanto o frontend contou com 10 testes utilizando
+desenvolvidos 28 testes utilizando xUnit, enquanto o frontend contou com 10 testes utilizando
 Vitest. Também foram realizados testes manuais utilizando `curl` e o navegador, contemplando tanto
 fluxos de sucesso quanto situações de erro, como arquivos inválidos, PDFs sem texto, tentativa de
 cadastro de e-mail duplicado e recursos inexistentes (404). Por fim, foi realizado um teste completo
 do ambiente Docker Compose, envolvendo build, inicialização dos serviços e execução do sistema pelo
 navegador.
+
+A extração de PDF foi ainda validada manualmente com 6 currículos fictícios de layouts diferentes
+(um único bloco de texto, campos em tabela, duas colunas, e diferentes formatações de nome), o que
+permitiu encontrar e corrigir o problema de layout em colunas descrito na seção anterior.
 
 ## Tempo aproximado dedicado
 
