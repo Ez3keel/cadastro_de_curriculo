@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ApiError } from '../api/client';
 import { obterCandidato } from '../api/candidatos';
+import { Alert } from '../components/Alert';
 import type { Candidato } from '../types/candidato';
 
 function formatarData(data: string) {
@@ -23,10 +24,22 @@ function Campo({ label, valor }: { label: string; valor: string | null }) {
 
 export function DetalhesPage() {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [candidato, setCandidato] = useState<Candidato | null>(null);
   const [carregando, setCarregando] = useState(true);
   const [naoEncontrado, setNaoEncontrado] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [mensagemSucesso] = useState<string | undefined>(
+    (location.state as { mensagem?: string } | null)?.mensagem,
+  );
+
+  useEffect(() => {
+    if (mensagemSucesso) {
+      navigate(location.pathname, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -48,6 +61,8 @@ export function DetalhesPage() {
       <Link to="/" className="mb-6 inline-block text-sm text-indigo-600 hover:underline">
         &larr; Voltar para a listagem
       </Link>
+
+      {mensagemSucesso && <Alert tipo="sucesso">{mensagemSucesso}</Alert>}
 
       {carregando && <p className="text-gray-500">Carregando...</p>}
 
