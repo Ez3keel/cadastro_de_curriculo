@@ -1,5 +1,8 @@
 using Curriculos.Api.Data;
 using Curriculos.Api.Middleware;
+using Curriculos.Api.Services;
+using Curriculos.Api.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -16,6 +19,21 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICandidatoService, CandidatoService>();
+builder.Services.AddValidatorsFromAssemblyContaining<CandidatoRequestValidator>();
+
+var origemPermitida = builder.Configuration["Cors:AllowedOrigin"];
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        if (!string.IsNullOrWhiteSpace(origemPermitida))
+        {
+            policy.WithOrigins(origemPermitida).AllowAnyHeader().AllowAnyMethod();
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -37,6 +55,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
