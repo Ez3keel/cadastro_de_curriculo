@@ -145,7 +145,7 @@ Interfaces são usadas **apenas onde há ganho concreto**:
 
 | Campo | Tipo | Regra |
 |---|---|---|
-| `Id` | `int`, identity, PK | |
+| `Id` | `Guid`, PK, gerado pela aplicação | |
 | `NomeCompleto` | `nvarchar(150)` | Obrigatório |
 | `Email` | `nvarchar(254)` | Obrigatório, formato válido, **único** (índice unique) |
 | `Telefone` | `nvarchar(20)` | Opcional |
