@@ -32,7 +32,7 @@ Após salvo, o candidato aparece em uma listagem com acesso a uma tela de detalh
 | Validação (back) | FluentValidation |
 | Leitura de PDF | UglyToad.PdfPig |
 | Logging | Serilog (console; arquivo em Development) |
-| Documentação da API | OpenAPI/Swagger (apenas em Development) |
+| Documentação da API | OpenAPI/Swagger (habilitado em qualquer ambiente, sem autenticação por ora) |
 | Frontend | React + TypeScript + Vite |
 | Rotas (front) | React Router |
 | Formulários (front) | React Hook Form + Zod |

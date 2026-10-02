@@ -59,7 +59,8 @@ de dados (3 candidatos fictícios) automaticamente ao iniciar (`Database:ApplyMi
 
 Acesse:
 - Frontend: http://localhost:8081
-- API: http://localhost:5299 (o Swagger UI não fica disponível no Docker, só em Development)
+- API: http://localhost:5299/api/candidatos (a raiz `http://localhost:5299/` não tem página, devolve 404)
+- Swagger UI (documentação interativa da API): http://localhost:5299/swagger
 - SQL Server (opcional, para inspecionar o banco): `localhost,1434`, usuário `sa`, senha
   `Curriculos@Docker2026` (credencial local de demonstração, usada só neste ambiente)
 
@@ -95,7 +96,7 @@ dotnet run --project src/Curriculos.Api
 ```
 
 A API sobe por padrão em `http://localhost:5299` (ver `src/Curriculos.Api/Properties/launchSettings.json`).
-O Swagger UI fica disponível em `/swagger` apenas em Development.
+O Swagger UI fica disponível em `/swagger`, também no Docker (habilitado em qualquer ambiente, sem autenticação — veja as melhorias futuras no DESENVOLVIMENTO.md).
 
 Para popular o banco com 3 candidatos fictícios, defina `Database:SeedData=true` (por exemplo, via
 variável de ambiente `Database__SeedData=true`) antes de rodar — a inserção só ocorre se a tabela

@@ -117,3 +117,8 @@ processamento de PDFs digitalizados ou que não possuam uma camada de texto adeq
 implementação de outros itens previstos no planejamento do projeto (paginação e busca na listagem,
 edição e exclusão de candidatos, autenticação e autorização, e CI com GitHub Actions rodando os
 testes).
+
+O Swagger UI foi mantido habilitado em qualquer ambiente, inclusive no Docker (Production), para
+facilitar a avaliação e o teste da API. Como consequência, a documentação da API fica acessível sem
+autenticação. Como melhoria futura, seria adicionada uma autenticação Basic para acessar o Swagger
+(ou a sua restrição ao ambiente de desenvolvimento), antes de qualquer uso fora de um ambiente local.
