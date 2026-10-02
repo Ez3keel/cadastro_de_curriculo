@@ -49,7 +49,7 @@ Utilizei o Claude Code com o modelo Sonnet 5, foi utilizada como ferramenta de a
 ## Em quais etapas a IA ajudou
 
 A IA auxiliou principalmente na geração e implementação do código a partir das especificações
-definidas, na identificação e correção de problemas e na criação de recursos para testes.
+definidas, na identificação e correção de problemas e na criação de recursos para testes e documentação rápida adicionando descrição das rotas uma coisa importante para outros usuários que podem utilizar a API.
 
 A IA auxiliou na investigação do problema de extração de PDF, permitindo identificar que a
 abordagem utilizada inicialmente não era adequada para a necessidade do projeto. Esse processo
@@ -122,3 +122,6 @@ O Swagger UI foi mantido habilitado em qualquer ambiente, inclusive no Docker (P
 facilitar a avaliação e o teste da API. Como consequência, a documentação da API fica acessível sem
 autenticação. Como melhoria futura, seria adicionada uma autenticação Basic para acessar o Swagger
 (ou a sua restrição ao ambiente de desenvolvimento), antes de qualquer uso fora de um ambiente local.
+
+Como melhoria de segurança, umaa coisa que acho importante seria adicionar uma atenticação via x-api-key
+para acesso à API, com o Swagger passando a exibir o botão "Authorize", e a proteção do próprio Swagger com autenticação Basic ou a sua restrição ao ambiente de desenvolvimento. Como o frontend é uma SPA, a chave ficaria visível no navegador; por isso, para proteger o uso por pessoas, o próximo passo seria uma autenticação com login (por exemplo, JWT).
