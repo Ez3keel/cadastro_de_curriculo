@@ -92,7 +92,19 @@ app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    // O estilo padrão dos trechos de código nas descrições tem margem vertical grande e
+    // espaçamento curto entre linhas, fazendo as etiquetas de linhas vizinhas se sobreporem.
+    options.HeadContent = """
+        <style>
+          .swagger-ui .markdown code,
+          .swagger-ui .renderedMarkdown code { padding: 1px 6px; line-height: inherit; }
+          .swagger-ui .markdown li,
+          .swagger-ui .renderedMarkdown li { line-height: 1.8; margin-bottom: 4px; }
+        </style>
+        """;
+});
 
 app.UseHttpsRedirection();
 
