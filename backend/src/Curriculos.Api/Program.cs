@@ -7,6 +7,7 @@ using Curriculos.Api.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +22,30 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API de Cadastro de Currículos",
+        Version = "v1",
+        Description = """
+            API para cadastrar e consultar candidatos, com leitura opcional de currículos em PDF.
+
+            **Fluxo típico:**
+            1. (Opcional) `POST /api/curriculos/extrair` envia um PDF e devolve nome, e-mail e telefone encontrados, sem salvar.
+            2. `POST /api/candidatos` cadastra o candidato (com os dados extraídos, revisados, ou preenchidos manualmente).
+            3. `GET /api/candidatos` lista os candidatos e `GET /api/candidatos/{id}` mostra os detalhes de um deles.
+
+            Em todas as rotas, clique em **Try it out**, preencha os dados e clique em **Execute**.
+            """,
+    });
+
+    var arquivoXml = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
+    if (File.Exists(arquivoXml))
+    {
+        options.IncludeXmlComments(arquivoXml);
+    }
+});
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
