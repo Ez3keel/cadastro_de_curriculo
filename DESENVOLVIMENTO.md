@@ -3,27 +3,26 @@
 ## Organização e execução do trabalho
 
 Durante o desenvolvimento do projeto, a implementação foi organizada em 10 etapas sequenciais,
-seguindo as orientações definidas no arquivo `CLAUDE.md`. Cada etapa foi concluída individualmente,
-com execução de build e testes antes da realização de cada commit, permitindo acompanhar a evolução
+seguindo as orientações definidas no arquivo `CLAUDE.md` eu optei em criar o arquivo `CLAUDE.md` porque o desenvolvimento flui melhor com o contexto do projeto. Cada etapa foi concluída individualmente,
+com execução de build e testes unitários antes da realização de cada commit, permitindo acompanhar a evolução
 do projeto de forma controlada e reduzir a possibilidade de introdução de erros entre as etapas.
 
 ## Principais decisões técnicas
 
-Além da decisão sobre a extração de texto dos PDFs, descrita mais adiante, outras decisões técnicas
-relevantes guiaram a implementação:
+Além da decisão sobre a extração de texto dos PDFs, outras decisões técnicas me guiaram durante a implementação:
 
 - **Arquitetura em camadas em um único projeto** (Apresentação, Aplicação, Domínio, Dados), em vez
   de vários projetos separados, por se tratar de um domínio pequeno em que a separação clara de
   responsabilidades já é suficiente, sem o custo adicional de gerenciar múltiplos projetos.
-- **Controllers em vez de Minimal APIs**, por ser um padrão mais familiar em times .NET e por
-  organizar melhor os endpoints por recurso (`CandidatosController`, `CurriculosController`).
+- **Controllers em vez de Minimal APIs**, por ser um padrão mais familiar que uso no meu dia a dia e vejo isso 
+  em times .NET e por organizar melhor os endpoints por recurso (`CandidatosController`, `CurriculosController`).
 - **Ausência do padrão Repository**, já que o `DbContext` do Entity Framework Core já cumpre esse
   papel (Repository + Unit of Work); uma camada adicional apenas repassaria chamadas sem agregar
   valor real.
 - **Interfaces apenas onde havia ganho concreto**: `ICandidatoService` (para testar os controllers
   isoladamente) e `ICurriculoTextExtractor` (para permitir trocar ou complementar a extração de PDF
   com OCR no futuro, sem alterar o restante do código). Classes como `CurriculoParser` e os
-  validadores não receberam interface por não terem essa necessidade — são testadas diretamente.
+  validadores não receberam interface por não terem essa necessidade e são testadas diretamente.
 - **Middleware global de tratamento de exceções**, centralizando a conversão de erros de negócio em
   respostas HTTP padronizadas (`ProblemDetails`), evitando `try/catch` repetido nos controllers.
 - **Validação duplicada entre frontend (Zod) e backend (FluentValidation)**: o frontend oferece
@@ -38,21 +37,19 @@ relevantes guiaram a implementação:
 Um dos principais desafios técnicos encontrados ocorreu na extração de informações de arquivos PDF.
 Inicialmente, foi utilizado o recurso `page.Text`, disponibilizado pela biblioteca PdfPig. Entretanto,
 durante os testes com um PDF de exemplo, foi identificado que o conteúdo extraído não preservava
-corretamente as quebras de linha. Esse comportamento interferia diretamente na lógica utilizada para
+corretamente as quebras de linha. Isso interferia diretamente na lógica utilizada para
 identificar informações como nome, e-mail e telefone, fazendo com que diferentes conteúdos fossem
 concatenados e prejudicando a interpretação dos dados. A correção adotada está descrita na seção
 "O que precisou corrigir, adaptar ou descartar".
 
 ## Ferramentas de IA utilizadas
 
-A Inteligência Artificial, por meio do Claude Code utilizando o modelo Sonnet 5, foi utilizada como
-ferramenta de apoio durante todo o processo de desenvolvimento.
+Utilizei o Claude Code com o modelo Sonnet 5, foi utilizada como ferramenta de apoio durante todo o processo de desenvolvimento, justamente por facilitar a implementação pois o projeto é desenvolvido de uma forma muito rápida, penso nisso porque antes eu poderia levar semanas dependendo do projeto e hoje consigo criar um roteiro que vai ser desenvolvido e consigo focar mais na parte de testes e implementações para validar o que está sendo feito e conseguir entregar a aplicação completa sem problemas.
 
 ## Em quais etapas a IA ajudou
 
 A IA auxiliou principalmente na geração e implementação do código a partir das especificações
-definidas, na identificação e correção de problemas, na criação de recursos para testes e na
-configuração do ambiente de execução com Docker Compose.
+definidas, na identificação e correção de problemas e na criação de recursos para testes.
 
 A IA auxiliou na investigação do problema de extração de PDF, permitindo identificar que a
 abordagem utilizada inicialmente não era adequada para a necessidade do projeto. Esse processo
@@ -68,7 +65,7 @@ através do navegador e do nginx.
 
 Dessa forma, a IA atuou como uma ferramenta de desenvolvimento e suporte técnico, acelerando a
 implementação, auxiliando na investigação de erros e contribuindo para a criação e execução dos
-testes. Entretanto, a validação humana permaneceu necessária para identificar comportamentos
+testes. Entretanto, a validação minha permaneceu necessária para identificar comportamentos
 incorretos, avaliar os resultados e decidir quais soluções deveriam ser mantidas, modificadas ou
 descartadas.
 
@@ -91,13 +88,13 @@ em vez de "Mariana Costa"), porque o cabeçalho da barra lateral estava na mesma
 nome, na outra coluna, e o agrupamento de linha (por posição vertical) misturava as duas colunas. A
 correção passou a detectar um espaço horizontal bem maior que o espaço normal entre palavras como
 indício de quebra de coluna, separando esse trecho em duas linhas distintas. Um teste automatizado
-usando esse PDF como fixture foi adicionado para não regredir esse cenário.
+usando esse PDF como exemplo foi adicionado para não regredir esse cenário.
 
 ## Como a solução foi verificada
 
 A qualidade da implementação foi verificada por diferentes mecanismos. No backend foram
 desenvolvidos 28 testes utilizando xUnit, enquanto o frontend contou com 10 testes utilizando
-Vitest. Também foram realizados testes manuais utilizando `curl` e o navegador, contemplando tanto
+Vitest. Também foram realizados testes manuais utilizando `POSTMAN` e o navegador, contemplando tanto
 fluxos de sucesso quanto situações de erro, como arquivos inválidos, PDFs sem texto, tentativa de
 cadastro de e-mail duplicado e recursos inexistentes (404). Por fim, foi realizado um teste completo
 do ambiente Docker Compose, envolvendo build, inicialização dos serviços e execução do sistema pelo
@@ -109,7 +106,7 @@ permitiu encontrar e corrigir o problema de layout em colunas descrito na seçã
 
 ## Tempo aproximado dedicado
 
-O desafio foi desenvolvido ao longo de aproximadamente 2 dias de trabalho.
+O desafio foi desenvolvido ao longo de aproximadamente 4 horas de trabalho.
 
 ## Dificuldades, limitações e melhorias futuras
 
