@@ -24,9 +24,7 @@ coverage/
 TestResults/
 
 ## Variáveis de ambiente e segredos
-.env
 .env.local
-appsettings.Development.json
 appsettings.Production.json
 
 ## Banco de dados local (ex.: LocalDB)

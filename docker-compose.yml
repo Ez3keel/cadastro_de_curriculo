@@ -3,7 +3,7 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: ${SA_PASSWORD:-Curriculos@Docker2024}
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD:-Curriculos@Docker2026}
     ports:
       - "${SQL_PORT:-1434}:1433"
     volumes:
@@ -22,7 +22,7 @@ services:
     build:
       context: ./backend
     environment:
-      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=Curriculos;User Id=sa;Password=${SA_PASSWORD:-Curriculos@Docker2024};TrustServerCertificate=True;"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=Curriculos;User Id=sa;Password=${SA_PASSWORD:-Curriculos@Docker2026};TrustServerCertificate=True;"
       Database__ApplyMigrationsOnStartup: "true"
       Database__SeedData: "true"
       Cors__AllowedOrigin: "http://localhost:${WEB_PORT:-8081}"

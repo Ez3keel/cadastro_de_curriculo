@@ -130,7 +130,7 @@ Interfaces são usadas **apenas onde há ganho concreto**:
 ├── docs/
 │   └── curriculo-exemplo.pdf
 ├── docker-compose.yml
-├── .env.example
+├── .env
 ├── .gitignore
 ├── CLAUDE.md
 ├── DESENVOLVIMENTO.md
@@ -288,7 +288,7 @@ O projeto deve funcionar **com e sem Docker**. O Docker é só uma forma de empa
 | Origem permitida no CORS | `Cors:AllowedOrigin` |
 | URL da API no front | `VITE_API_URL` |
 
-- `appsettings.json` **sem credenciais reais**. Fornecer `appsettings.Development.example.json` e `.env.example`.
+- `appsettings.json` **sem credenciais**. As configurações de desenvolvimento (`.env`, `appsettings.Development.json`, `frontend/.env.development`) são versionadas, com credenciais apenas de demonstração para ambiente local, para o projeto rodar sem ajustes manuais.
 - Localmente: `dotnet ef database update`.
 - Script SQL: `dotnet ef migrations script --idempotent -o database/schema.sql`.
 
@@ -358,7 +358,7 @@ Implementar em etapas, **uma de cada vez**, parando ao final de cada uma para re
 6. Seed de dados
 7. Frontend: setup (Vite, Tailwind, Router), cliente HTTP, listagem e detalhes
 8. Frontend: formulário, upload de PDF, mensagens e testes
-9. Docker Compose e `.env.example`
+9. Docker Compose e `.env`
 10. README, `schema.sql` e PDF de exemplo
 
 ### Regras para o assistente

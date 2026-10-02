@@ -46,8 +46,8 @@ docker-compose.yml
 
 ## Executando com Docker Compose (mais simples)
 
-Não é preciso criar nenhum arquivo nem alterar configurações: o `docker-compose.yml` já traz valores
-padrão para tudo. Basta ter o Docker instalado e, na raiz do repositório, rodar:
+Não é preciso criar nenhum arquivo nem alterar configurações: o `.env` da raiz (já versionado) traz a
+senha e as portas. Basta ter o Docker instalado e, na raiz do repositório, rodar:
 
 ```bash
 docker compose up --build
@@ -61,30 +61,35 @@ Acesse:
 - Frontend: http://localhost:8081
 - API: http://localhost:5299 (o Swagger UI não fica disponível no Docker, só em Development)
 - SQL Server (opcional, para inspecionar o banco): `localhost,1434`, usuário `sa`, senha
-  `Curriculos@Docker2024` (credencial local de demonstração, usada só neste ambiente)
+  `Curriculos@Docker2026` (credencial local de demonstração, usada só neste ambiente)
 
 Para derrubar o ambiente: `docker compose down` (adicione `-v` para também apagar o volume do banco).
 
-**Personalização (opcional):** para mudar a senha ou as portas, copie `.env.example` para `.env` e
-edite os valores (`SA_PASSWORD`, `API_PORT`, `WEB_PORT`, `SQL_PORT`). O SQL Server do Docker usa por
-padrão a porta `1434` no host, para não conflitar com um SQL Server local na `1433`.
+**Personalização (opcional):** para mudar a senha ou as portas, edite o `.env` da raiz (`SA_PASSWORD`,
+`API_PORT`, `WEB_PORT`, `SQL_PORT`). O SQL Server do Docker usa por padrão a porta `1434` no host,
+para não conflitar com um SQL Server local na `1433`. Se mudar a senha, atualize também a connection
+string em `backend/src/Curriculos.Api/appsettings.Development.json` (usada ao rodar sem Docker).
+
+> As credenciais versionadas neste repositório são apenas de demonstração para ambiente local.
 
 ## Executando localmente, sem Docker
 
 ### Banco de dados
 
-Suba um SQL Server à sua escolha (local, ou um container avulso, por exemplo):
+A forma mais simples é subir apenas o SQL Server do Docker Compose (usa a senha e a porta do `.env`):
 
 ```bash
-docker run -d --name curriculos-sqlserver -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=SuaSenhaForte123!" -p 1433:1433 mcr.microsoft.com/mssql/server:2022-latest
+docker compose up -d sqlserver
 ```
+
+A connection string versionada em `backend/src/Curriculos.Api/appsettings.Development.json` já aponta
+para ele (`localhost,1434`). Para usar outro SQL Server (instalado na máquina, por exemplo), edite
+essa connection string ou defina a variável de ambiente `ConnectionStrings__DefaultConnection`.
 
 ### Backend
 
 ```bash
 cd backend
-cp src/Curriculos.Api/appsettings.Development.example.json src/Curriculos.Api/appsettings.Development.json
-# edite appsettings.Development.json com a connection string do seu SQL Server
 dotnet ef database update --project src/Curriculos.Api --startup-project src/Curriculos.Api
 dotnet run --project src/Curriculos.Api
 ```
@@ -100,29 +105,31 @@ estiver vazia.
 
 ```bash
 cd frontend
-cp .env.example .env.local
 npm install
 npm run dev
 ```
 
-A aplicação sobe em `http://localhost:5173` e espera a API em `VITE_API_URL` (padrão
-`http://localhost:5299`, configurável em `.env.local`).
+A aplicação sobe em `http://localhost:5173` e espera a API em `VITE_API_URL`, já definida em
+`frontend/.env.development` (`http://localhost:5299`).
 
 > A origem do frontend precisa estar liberada no CORS da API — configurável em
 > `Cors:AllowedOrigin` (`appsettings.Development.json`).
 
-## Configuração (sem credenciais reais no repositório)
+## Configuração
 
 | Configuração | Onde | Padrão |
 |---|---|---|
-| Connection string | `ConnectionStrings:DefaultConnection` (ou `ConnectionStrings__DefaultConnection`) | — |
+| Connection string | `ConnectionStrings:DefaultConnection` em `appsettings.Development.json` (local) ou `ConnectionStrings__DefaultConnection` no `docker-compose.yml` | `localhost,1434` (SQL Server do Compose) |
 | Aplicar migrations ao iniciar | `Database:ApplyMigrationsOnStartup` | `false` (`true` no Docker) |
-| Seed de dados | `Database:SeedData` | `false` |
-| Origem permitida no CORS | `Cors:AllowedOrigin` | — |
-| URL da API no frontend | `VITE_API_URL` | — |
+| Seed de dados | `Database:SeedData` | `false` (`true` no Docker) |
+| Origem permitida no CORS | `Cors:AllowedOrigin` | `http://localhost:5173` (local) |
+| URL da API no frontend | `VITE_API_URL` em `frontend/.env.development` | `http://localhost:5299` |
+| Senha do SQL Server e portas do Docker | `.env` (raiz) | ver arquivo |
 
-Arquivos de exemplo sem credenciais reais: `backend/src/Curriculos.Api/appsettings.Development.example.json`,
-`frontend/.env.example` e `.env.example` (raiz, usado pelo Docker Compose).
+Os arquivos de configuração de desenvolvimento (`.env`, `appsettings.Development.json` e
+`frontend/.env.development`) estão versionados de propósito, para que o projeto rode sem nenhum
+ajuste manual. Eles contêm apenas credenciais de demonstração para ambiente local; o
+`appsettings.json` base não tem credenciais.
 
 ## Criando a estrutura do banco manualmente
 
@@ -131,7 +138,8 @@ Além das migrations do EF Core, o script `database/schema.sql` (gerado com
 criar a estrutura sem depender do .NET:
 
 ```bash
-sqlcmd -S localhost -U sa -P "SuaSenhaForte123!" -i database/schema.sql
+sqlcmd -S localhost,1434 -U sa -P "Curriculos@Docker2026" -C -Q "CREATE DATABASE Curriculos"
+sqlcmd -S localhost,1434 -U sa -P "Curriculos@Docker2026" -C -d Curriculos -i database/schema.sql
 ```
 
 ## Testes
