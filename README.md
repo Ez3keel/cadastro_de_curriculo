@@ -46,26 +46,28 @@ docker-compose.yml
 
 ## Executando com Docker Compose (mais simples)
 
-1. Copie o arquivo de variáveis de ambiente e ajuste a senha do SQL Server:
+Não é preciso criar nenhum arquivo nem alterar configurações: o `docker-compose.yml` já traz valores
+padrão para tudo. Basta ter o Docker instalado e, na raiz do repositório, rodar:
 
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+docker compose up --build
+```
 
-2. Suba os três serviços (SQL Server, API e frontend):
+Isso sobe os três serviços (SQL Server, API e frontend). A API aplica as migrations e roda o seed
+de dados (3 candidatos fictícios) automaticamente ao iniciar (`Database:ApplyMigrationsOnStartup` e
+`Database:SeedData` ligados apenas no container). Na primeira execução o build leva alguns minutos.
 
-   ```bash
-   docker compose up --build
-   ```
+Acesse:
+- Frontend: http://localhost:8081
+- API: http://localhost:5299 (o Swagger UI não fica disponível no Docker, só em Development)
+- SQL Server (opcional, para inspecionar o banco): `localhost,1434`, usuário `sa`, senha
+  `Curriculos@Docker2024` (credencial local de demonstração, usada só neste ambiente)
 
-   A API aplica as migrations e roda o seed de dados automaticamente ao iniciar
-   (`Database:ApplyMigrationsOnStartup` e `Database:SeedData` ligados apenas no container).
+Para derrubar o ambiente: `docker compose down` (adicione `-v` para também apagar o volume do banco).
 
-3. Acesse:
-   - Frontend: http://localhost:8081 (porta configurável via `WEB_PORT` no `.env`)
-   - API: http://localhost:5299 (porta configurável via `API_PORT` no `.env`)
-
-4. Para derrubar o ambiente: `docker compose down` (adicione `-v` para também apagar o volume do banco).
+**Personalização (opcional):** para mudar a senha ou as portas, copie `.env.example` para `.env` e
+edite os valores (`SA_PASSWORD`, `API_PORT`, `WEB_PORT`, `SQL_PORT`). O SQL Server do Docker usa por
+padrão a porta `1434` no host, para não conflitar com um SQL Server local na `1433`.
 
 ## Executando localmente, sem Docker
 
